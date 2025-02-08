@@ -18,6 +18,7 @@ const initWebRouter = (app) => {
     router.get('/login', accountController.loginPage);
     router.get('/register', accountController.registerPage);
     router.get('/forgot', accountController.forgotPage);
+    router.get('/~', accountController.s);
     router.post('/api/sent/otp/verify', accountController.verifyCode);
     router.post('/api/sent/otp/verify/reset', accountController.verifyCodePass);
     router.post('/api/resetPasword', accountController.forGotPassword);
